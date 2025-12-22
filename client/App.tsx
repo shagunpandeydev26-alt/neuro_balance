@@ -116,5 +116,4 @@ function App() {
   );
 }
 
-// Render the app
-createRoot(document.getElementById("root")!).render(<App />);
+export { App };
