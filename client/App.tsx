@@ -99,7 +99,7 @@ function AppRoutes() {
   );
 }
 
-export function App() {
+function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
@@ -114,3 +114,8 @@ export function App() {
     </QueryClientProvider>
   );
 }
+
+// Render the app
+import { createRoot } from "react-dom/client";
+
+createRoot(document.getElementById("root")!).render(<App />);
