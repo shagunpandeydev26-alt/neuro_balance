@@ -1,13 +1,12 @@
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/lib/auth-context";
 import {
   ArrowUpRight,
-  ArrowDownRight,
   TrendingUp,
-  Calendar,
   Zap,
   Gift,
-  Shield,
+  Wallet,
 } from "lucide-react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
@@ -49,14 +48,20 @@ const activities = [
 ];
 
 export default function Dashboard() {
+  const { user, connectWallet } = useAuth();
+
   const mfiScore = 72;
   const mfiTrend = 7;
-  const walletAddress = "0x742d...8B2f";
   const tokenBalance = 1250;
   const nftCount = 12;
 
+  const handleConnectWallet = () => {
+    const walletAddress = "0x" + Math.random().toString(16).slice(2, 14) + Math.random().toString(16).slice(2, 14);
+    connectWallet(walletAddress);
+  };
+
   return (
-    <Layout isLoggedIn={true} walletAddress={walletAddress} showSidebar={true}>
+    <Layout isLoggedIn={true} walletAddress={user?.walletAddress} showSidebar={true}>
       <div className="px-4 md:px-8 py-8 max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
@@ -71,38 +76,38 @@ export default function Dashboard() {
         {/* MFI Score Card */}
         <div className="grid md:grid-cols-3 gap-6 mb-8">
           {/* Main MFI Card */}
-          <div className="md:col-span-1 bg-gradient-to-br from-wellness-50 to-wellness-100 border border-wellness-200 rounded-2xl p-8 shadow-md">
+          <div className="md:col-span-1 bg-gradient-to-br from-wellness-900 to-wellness-800 border border-wellness-700 rounded-2xl p-8 shadow-md">
             <div className="space-y-6">
               <div>
-                <p className="text-sm font-medium text-wellness-700 mb-2">
+                <p className="text-sm font-medium text-wellness-400 mb-2">
                   MFI Score
                 </p>
                 <div className="flex items-baseline gap-3">
-                  <span className="text-5xl font-bold text-wellness-600">
+                  <span className="text-5xl font-bold text-wellness-300">
                     {mfiScore}
                   </span>
-                  <span className="text-sm text-wellness-600">/100</span>
+                  <span className="text-sm text-wellness-400">/100</span>
                 </div>
               </div>
 
               <div className="space-y-3">
-                <div className="h-2 bg-wellness-200 rounded-full overflow-hidden">
+                <div className="h-2 bg-wellness-700 rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-gradient-to-r from-wellness-500 to-wellness-600 rounded-full transition-all"
+                    className="h-full bg-gradient-to-r from-wellness-500 to-wellness-400 rounded-full transition-all"
                     style={{ width: `${mfiScore}%` }}
                   ></div>
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <ArrowUpRight className="h-4 w-4 text-growth-600" />
-                  <span className="text-sm font-medium text-growth-600">
+                  <ArrowUpRight className="h-4 w-4 text-growth-400" />
+                  <span className="text-sm font-medium text-growth-400">
                     +{mfiTrend} this week
                   </span>
                 </div>
               </div>
 
-              <div className="pt-4 border-t border-wellness-200">
-                <p className="text-xs font-medium text-wellness-700 mb-3">
+              <div className="pt-4 border-t border-wellness-700">
+                <p className="text-xs font-medium text-wellness-400 mb-3">
                   Risk Status
                 </p>
                 <div className="flex items-center gap-2">
@@ -118,34 +123,34 @@ export default function Dashboard() {
           </div>
 
           {/* Token Card */}
-          <div className="bg-gradient-to-br from-growth-50 to-growth-100 border border-growth-200 rounded-2xl p-8 shadow-md">
+          <div className="bg-gradient-to-br from-growth-900 to-growth-800 border border-growth-700 rounded-2xl p-8 shadow-md">
             <div className="space-y-6">
               <div className="flex items-start justify-between">
                 <div>
-                  <p className="text-sm font-medium text-growth-700 mb-2">
+                  <p className="text-sm font-medium text-growth-400 mb-2">
                     SOT Balance
                   </p>
-                  <div className="text-3xl font-bold text-growth-600">
+                  <div className="text-3xl font-bold text-growth-300">
                     {tokenBalance}
                   </div>
                 </div>
-                <div className="h-12 w-12 bg-growth-200 rounded-lg flex items-center justify-center">
-                  <Zap className="h-6 w-6 text-growth-600" />
+                <div className="h-12 w-12 bg-growth-800 rounded-lg flex items-center justify-center">
+                  <Zap className="h-6 w-6 text-growth-400" />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <p className="text-xs font-medium text-growth-700">
+                <p className="text-xs font-medium text-growth-400">
                   Equivalent Value
                 </p>
-                <p className="text-2xl font-bold text-growth-600">
+                <p className="text-2xl font-bold text-growth-300">
                   ${(tokenBalance * 0.45).toFixed(2)}
                 </p>
               </div>
 
               <Button
                 variant="outline"
-                className="w-full border-growth-300 text-growth-600 hover:bg-growth-50"
+                className="w-full border-growth-700 text-growth-400 hover:bg-growth-900/50"
               >
                 Offset Stress
               </Button>
@@ -153,24 +158,24 @@ export default function Dashboard() {
           </div>
 
           {/* NFT Card */}
-          <div className="bg-gradient-to-br from-wellness-50 via-purple-50 to-growth-50 border border-purple-200 rounded-2xl p-8 shadow-md">
+          <div className="bg-gradient-to-br from-purple-900 to-purple-800 border border-purple-700 rounded-2xl p-8 shadow-md">
             <div className="space-y-6">
               <div className="flex items-start justify-between">
                 <div>
-                  <p className="text-sm font-medium text-purple-700 mb-2">
+                  <p className="text-sm font-medium text-purple-400 mb-2">
                     Proof-of-Care NFTs
                   </p>
-                  <div className="text-3xl font-bold text-purple-600">
+                  <div className="text-3xl font-bold text-purple-300">
                     {nftCount}
                   </div>
                 </div>
-                <div className="h-12 w-12 bg-purple-200 rounded-lg flex items-center justify-center">
-                  <Gift className="h-6 w-6 text-purple-600" />
+                <div className="h-12 w-12 bg-purple-800 rounded-lg flex items-center justify-center">
+                  <Gift className="h-6 w-6 text-purple-400" />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <p className="text-xs font-medium text-purple-700">
+                <p className="text-xs font-medium text-purple-400">
                   Latest Achievement
                 </p>
                 <p className="text-sm font-semibold text-foreground">
@@ -180,7 +185,7 @@ export default function Dashboard() {
 
               <Button
                 variant="outline"
-                className="w-full border-purple-300 text-purple-600 hover:bg-purple-50"
+                className="w-full border-purple-700 text-purple-400 hover:bg-purple-900/50"
               >
                 View Gallery
               </Button>
@@ -223,9 +228,9 @@ export default function Dashboard() {
               <Line
                 type="monotone"
                 dataKey="score"
-                stroke="rgb(var(--wellness-500))"
+                stroke="hsl(var(--wellness-500))"
                 strokeWidth={2}
-                dot={{ fill: "rgb(var(--wellness-500))", r: 4 }}
+                dot={{ fill: "hsl(var(--wellness-500))", r: 4 }}
                 activeDot={{ r: 6 }}
               />
             </LineChart>
@@ -246,8 +251,8 @@ export default function Dashboard() {
                   key={activity.id}
                   className="flex items-start gap-4 p-4 hover:bg-muted rounded-lg transition-colors"
                 >
-                  <div className="h-10 w-10 rounded-full bg-wellness-100 flex items-center justify-center flex-shrink-0">
-                    <Icon className="h-5 w-5 text-wellness-600" />
+                  <div className="h-10 w-10 rounded-full bg-wellness-900 flex items-center justify-center flex-shrink-0">
+                    <Icon className="h-5 w-5 text-wellness-400" />
                   </div>
 
                   <div className="flex-1 min-w-0">
