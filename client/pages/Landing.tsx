@@ -31,7 +31,10 @@ export default function Landing() {
 
   return (
     <Layout showSidebar={false}>
-      <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
+      <AuthModal
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+      />
 
       <div className="bg-gradient-to-b from-wellness-900 via-background to-background">
         {/* Hero Section */}
@@ -132,7 +135,9 @@ export default function Landing() {
                   <Brain className="h-6 w-6 text-wellness-400" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold mb-2">MFI Score & SHAP</h3>
+                  <h3 className="text-xl font-semibold mb-2">
+                    MFI Score & SHAP
+                  </h3>
                   <p className="text-muted-foreground">
                     Mental Fitness Index powered by explainable AI. Understand
                     exactly what factors influence your wellness score.
@@ -152,8 +157,9 @@ export default function Landing() {
                     Proof-of-Care NFTs
                   </h3>
                   <p className="text-muted-foreground">
-                    Earn unique NFTs for completing wellness goals and milestones.
-                    Unlock achievements and build your wellness portfolio.
+                    Earn unique NFTs for completing wellness goals and
+                    milestones. Unlock achievements and build your wellness
+                    portfolio.
                   </p>
                 </div>
               </div>
@@ -186,8 +192,8 @@ export default function Landing() {
                 <div>
                   <h3 className="text-xl font-semibold mb-2">DAO Governance</h3>
                   <p className="text-muted-foreground">
-                    Vote on platform proposals and shape the future of NeuroBalance.
-                    Your voice matters.
+                    Vote on platform proposals and shape the future of
+                    NeuroBalance. Your voice matters.
                   </p>
                 </div>
               </div>
@@ -216,12 +222,10 @@ export default function Landing() {
                   <Lock className="h-6 w-6 text-growth-400" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold mb-2">
-                    Privacy First
-                  </h3>
+                  <h3 className="text-xl font-semibold mb-2">Privacy First</h3>
                   <p className="text-muted-foreground">
-                    Your data is encrypted and verifiable. Control what you share
-                    and with whom.
+                    Your data is encrypted and verifiable. Control what you
+                    share and with whom.
                   </p>
                 </div>
               </div>
@@ -268,8 +272,8 @@ export default function Landing() {
                 Ready to Take Control?
               </h2>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                Sign up and start tracking your mental wellness today.
-                Measure your progress, heal your mind, and offset your stress.
+                Sign up and start tracking your mental wellness today. Measure
+                your progress, heal your mind, and offset your stress.
               </p>
               <Button
                 onClick={handleButtonClick}
@@ -284,9 +288,7 @@ export default function Landing() {
 
         {/* Footer */}
         <footer className="border-t border-border px-4 md:px-6 py-12 max-w-6xl mx-auto text-center text-sm text-muted-foreground">
-          <p>
-            © 2024 NeuroBalance. Built for wellness, powered by community.
-          </p>
+          <p>© 2024 NeuroBalance. Built for wellness, powered by community.</p>
         </footer>
       </div>
     </Layout>

@@ -1,14 +1,16 @@
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/auth-context";
+import { ArrowUpRight, TrendingUp, Zap, Gift, Wallet } from "lucide-react";
 import {
-  ArrowUpRight,
-  TrendingUp,
-  Zap,
-  Gift,
-  Wallet,
-} from "lucide-react";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
 
 const mfiData = [
   { date: "Jan 1", score: 45 },
@@ -56,12 +58,19 @@ export default function Dashboard() {
   const nftCount = 12;
 
   const handleConnectWallet = () => {
-    const walletAddress = "0x" + Math.random().toString(16).slice(2, 14) + Math.random().toString(16).slice(2, 14);
+    const walletAddress =
+      "0x" +
+      Math.random().toString(16).slice(2, 14) +
+      Math.random().toString(16).slice(2, 14);
     connectWallet(walletAddress);
   };
 
   return (
-    <Layout isLoggedIn={true} walletAddress={user?.walletAddress} showSidebar={true}>
+    <Layout
+      isLoggedIn={true}
+      walletAddress={user?.walletAddress}
+      showSidebar={true}
+    >
       <div className="px-4 md:px-8 py-8 max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
@@ -112,7 +121,9 @@ export default function Dashboard() {
                 </p>
                 <div className="flex items-center gap-2">
                   <div className="h-3 w-3 bg-growth-500 rounded-full"></div>
-                  <span className="text-sm font-medium text-foreground">Low</span>
+                  <span className="text-sm font-medium text-foreground">
+                    Low
+                  </span>
                 </div>
               </div>
 

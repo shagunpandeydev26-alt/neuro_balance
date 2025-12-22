@@ -1,6 +1,12 @@
 import { Layout } from "@/components/layout/Layout";
 import { useAuth } from "@/lib/auth-context";
-import { Settings as SettingsIcon, Bell, Eye, Lock, Palette } from "lucide-react";
+import {
+  Settings as SettingsIcon,
+  Bell,
+  Eye,
+  Lock,
+  Palette,
+} from "lucide-react";
 import { useState } from "react";
 
 export default function Settings() {
@@ -22,7 +28,11 @@ export default function Settings() {
   };
 
   return (
-    <Layout isLoggedIn={true} walletAddress={user?.walletAddress} showSidebar={true}>
+    <Layout
+      isLoggedIn={true}
+      walletAddress={user?.walletAddress}
+      showSidebar={true}
+    >
       <div className="px-4 md:px-8 py-8 max-w-4xl mx-auto">
         <div className="mb-8">
           <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
@@ -44,7 +54,9 @@ export default function Settings() {
             <div className="space-y-4">
               <div className="flex items-center justify-between p-4 hover:bg-muted rounded-lg transition-colors">
                 <div>
-                  <p className="font-medium text-foreground">Email Notifications</p>
+                  <p className="font-medium text-foreground">
+                    Email Notifications
+                  </p>
                   <p className="text-sm text-muted-foreground">
                     Receive updates about your wellness progress
                   </p>
@@ -52,9 +64,7 @@ export default function Settings() {
                 <button
                   onClick={() => handleToggle("emailNotifications")}
                   className={`relative w-14 h-8 rounded-full transition-colors ${
-                    settings.emailNotifications
-                      ? "bg-wellness-500"
-                      : "bg-muted"
+                    settings.emailNotifications ? "bg-wellness-500" : "bg-muted"
                   }`}
                 >
                   <div
@@ -77,9 +87,7 @@ export default function Settings() {
                 <button
                   onClick={() => handleToggle("pushNotifications")}
                   className={`relative w-14 h-8 rounded-full transition-colors ${
-                    settings.pushNotifications
-                      ? "bg-wellness-500"
-                      : "bg-muted"
+                    settings.pushNotifications ? "bg-wellness-500" : "bg-muted"
                   }`}
                 >
                   <div
@@ -102,9 +110,7 @@ export default function Settings() {
                 <button
                   onClick={() => handleToggle("marketingEmails")}
                   className={`relative w-14 h-8 rounded-full transition-colors ${
-                    settings.marketingEmails
-                      ? "bg-wellness-500"
-                      : "bg-muted"
+                    settings.marketingEmails ? "bg-wellness-500" : "bg-muted"
                   }`}
                 >
                   <div
@@ -155,10 +161,14 @@ export default function Settings() {
                     <span className="text-white text-xs font-medium">Blue</span>
                   </button>
                   <button className="p-3 bg-growth-500 rounded-lg border-2 border-border hover:border-growth-500 transition-colors">
-                    <span className="text-white text-xs font-medium">Green</span>
+                    <span className="text-white text-xs font-medium">
+                      Green
+                    </span>
                   </button>
                   <button className="p-3 bg-purple-500 rounded-lg border-2 border-border hover:border-purple-500 transition-colors">
-                    <span className="text-white text-xs font-medium">Purple</span>
+                    <span className="text-white text-xs font-medium">
+                      Purple
+                    </span>
                   </button>
                 </div>
               </div>
@@ -198,9 +208,7 @@ export default function Settings() {
 
               <div className="flex items-center justify-between p-4 hover:bg-muted rounded-lg transition-colors">
                 <div>
-                  <p className="font-medium text-foreground">
-                    Data Privacy
-                  </p>
+                  <p className="font-medium text-foreground">Data Privacy</p>
                   <p className="text-sm text-muted-foreground">
                     Keep your data private and encrypted
                   </p>

@@ -24,7 +24,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = async (email: string, password: string) => {
     // Simulate API call
     await new Promise((resolve) => setTimeout(resolve, 500));
-    
+
     // In a real app, this would validate credentials with a backend
     setUser({
       id: "user-" + Date.now(),
@@ -36,7 +36,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const register = async (email: string, name: string, password: string) => {
     // Simulate API call
     await new Promise((resolve) => setTimeout(resolve, 500));
-    
+
     // In a real app, this would create a new user in the backend
     setUser({
       id: "user-" + Date.now(),

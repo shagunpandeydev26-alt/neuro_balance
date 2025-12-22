@@ -17,12 +17,19 @@ export default function Profile() {
   };
 
   const handleConnectWallet = () => {
-    const walletAddress = "0x" + Math.random().toString(16).slice(2, 14) + Math.random().toString(16).slice(2, 14);
+    const walletAddress =
+      "0x" +
+      Math.random().toString(16).slice(2, 14) +
+      Math.random().toString(16).slice(2, 14);
     connectWallet(walletAddress);
   };
 
   return (
-    <Layout isLoggedIn={true} walletAddress={user?.walletAddress} showSidebar={true}>
+    <Layout
+      isLoggedIn={true}
+      walletAddress={user?.walletAddress}
+      showSidebar={true}
+    >
       <div className="px-4 md:px-8 py-8 max-w-4xl mx-auto">
         <div className="mb-8">
           <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">

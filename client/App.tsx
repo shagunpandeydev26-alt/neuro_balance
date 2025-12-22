@@ -34,7 +34,7 @@ function AppRoutes() {
   return (
     <Routes>
       <Route path="/" element={<Landing />} />
-      
+
       {/* Protected routes */}
       <Route
         path="/dashboard"

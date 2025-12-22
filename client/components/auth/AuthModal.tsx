@@ -39,10 +39,10 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
         }
         await register(email, name, password);
       }
-      
+
       // Close modal on successful auth
       onClose();
-      
+
       // Reset form
       setEmail("");
       setPassword("");
@@ -150,8 +150,8 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
             {loading
               ? "Loading..."
               : mode === "login"
-              ? "Sign In"
-              : "Create Account"}
+                ? "Sign In"
+                : "Create Account"}
           </Button>
 
           {/* Toggle Mode */}

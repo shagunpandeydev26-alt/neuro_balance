@@ -21,7 +21,10 @@ export function Navbar({ onMenuClick }: NavbarProps) {
     <nav className="border-b border-border bg-card shadow-sm sticky top-0 z-50">
       <div className="flex items-center justify-between px-4 md:px-6 py-4 max-w-7xl mx-auto">
         {/* Logo */}
-        <Link to={isAuthenticated ? "/dashboard" : "/"} className="flex items-center gap-2 font-bold text-lg">
+        <Link
+          to={isAuthenticated ? "/dashboard" : "/"}
+          className="flex items-center gap-2 font-bold text-lg"
+        >
           <div className="bg-gradient-to-br from-wellness-500 to-growth-500 rounded-lg p-2">
             <Brain className="h-5 w-5 text-white" />
           </div>
@@ -46,7 +49,10 @@ export function Navbar({ onMenuClick }: NavbarProps) {
               {!user?.walletAddress && (
                 <Button
                   onClick={() => {
-                    const walletAddress = "0x" + Math.random().toString(16).slice(2, 14) + Math.random().toString(16).slice(2, 14);
+                    const walletAddress =
+                      "0x" +
+                      Math.random().toString(16).slice(2, 14) +
+                      Math.random().toString(16).slice(2, 14);
                     connectWallet(walletAddress);
                   }}
                   variant="outline"
@@ -62,7 +68,8 @@ export function Navbar({ onMenuClick }: NavbarProps) {
                 <div className="hidden sm:flex items-center gap-2 px-3 py-2 bg-muted rounded-lg text-sm">
                   <div className="h-2 w-2 bg-growth-500 rounded-full"></div>
                   <span className="text-muted-foreground">
-                    {user.walletAddress.slice(0, 6)}...{user.walletAddress.slice(-4)}
+                    {user.walletAddress.slice(0, 6)}...
+                    {user.walletAddress.slice(-4)}
                   </span>
                 </div>
               )}

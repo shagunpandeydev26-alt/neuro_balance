@@ -15,7 +15,11 @@ interface SidebarProps {
   isLoggedIn?: boolean;
 }
 
-export function Sidebar({ isOpen = true, onClose, isLoggedIn = false }: SidebarProps) {
+export function Sidebar({
+  isOpen = true,
+  onClose,
+  isLoggedIn = false,
+}: SidebarProps) {
   const location = useLocation();
 
   const navItems = [
@@ -47,7 +51,7 @@ export function Sidebar({ isOpen = true, onClose, isLoggedIn = false }: SidebarP
       <aside
         className={cn(
           "fixed md:static left-0 top-0 h-screen w-64 bg-sidebar border-r border-sidebar-border flex flex-col transition-transform z-40",
-          isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+          isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0",
         )}
       >
         {/* Close Button (Mobile) */}
@@ -74,7 +78,7 @@ export function Sidebar({ isOpen = true, onClose, isLoggedIn = false }: SidebarP
                   "flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-sm font-medium",
                   isActive(item.href)
                     ? "bg-sidebar-primary text-sidebar-primary-foreground"
-                    : "text-sidebar-foreground hover:bg-sidebar-accent"
+                    : "text-sidebar-foreground hover:bg-sidebar-accent",
                 )}
               >
                 <Icon className="h-5 w-5" />
