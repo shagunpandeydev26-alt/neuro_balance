@@ -5,8 +5,6 @@ import {
   Image,
   ShoppingCart,
   Vote,
-  User,
-  Settings,
   X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -26,11 +24,6 @@ export function Sidebar({ isOpen = true, onClose, isLoggedIn = false }: SidebarP
     { label: "NFTs", href: "/nfts", icon: Image },
     { label: "Marketplace", href: "/marketplace", icon: ShoppingCart },
     { label: "DAO", href: "/dao", icon: Vote },
-  ];
-
-  const settingsItems = [
-    { label: "Profile", href: "/profile", icon: User },
-    { label: "Settings", href: "/settings", icon: Settings },
   ];
 
   const isActive = (href: string) => location.pathname === href;
@@ -90,29 +83,6 @@ export function Sidebar({ isOpen = true, onClose, isLoggedIn = false }: SidebarP
             );
           })}
         </nav>
-
-        {/* Settings Section */}
-        <div className="border-t border-sidebar-border p-4 space-y-2">
-          {settingsItems.map((item) => {
-            const Icon = item.icon;
-            return (
-              <Link
-                key={item.href}
-                to={item.href}
-                onClick={onClose}
-                className={cn(
-                  "flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-sm font-medium",
-                  isActive(item.href)
-                    ? "bg-sidebar-primary text-sidebar-primary-foreground"
-                    : "text-sidebar-foreground hover:bg-sidebar-accent"
-                )}
-              >
-                <Icon className="h-5 w-5" />
-                {item.label}
-              </Link>
-            );
-          })}
-        </div>
       </aside>
     </>
   );
