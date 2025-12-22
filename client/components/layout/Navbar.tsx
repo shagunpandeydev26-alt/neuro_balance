@@ -10,22 +10,7 @@ interface NavbarProps {
 
 export function Navbar({ onMenuClick }: NavbarProps) {
   const [showUserMenu, setShowUserMenu] = useState(false);
-
-  // Safely use useAuth - guard against context not being available
-  let user, isAuthenticated, logout, connectWallet;
-  try {
-    const auth = useAuth();
-    user = auth.user;
-    isAuthenticated = auth.isAuthenticated;
-    logout = auth.logout;
-    connectWallet = auth.connectWallet;
-  } catch (e) {
-    // If useAuth is not available, set defaults
-    user = null;
-    isAuthenticated = false;
-    logout = () => {};
-    connectWallet = () => {};
-  }
+  const { user, isAuthenticated, logout, connectWallet } = useAuth();
 
   const handleDisconnect = () => {
     logout();
