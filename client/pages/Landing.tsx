@@ -1,6 +1,9 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Layout } from "@/components/layout/Layout";
+import { AuthModal } from "@/components/auth/AuthModal";
+import { useAuth } from "@/lib/auth-context";
 import {
   Brain,
   TrendingUp,
@@ -13,9 +16,24 @@ import {
 } from "lucide-react";
 
 export default function Landing() {
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const { isAuthenticated } = useAuth();
+
+  // If user is authenticated, redirect to dashboard
+  if (isAuthenticated) {
+    window.location.href = "/dashboard";
+    return null;
+  }
+
+  const handleButtonClick = () => {
+    setShowAuthModal(true);
+  };
+
   return (
     <Layout showSidebar={false}>
-      <div className="bg-gradient-to-b from-wellness-50 to-background">
+      <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
+
+      <div className="bg-gradient-to-b from-wellness-900 via-background to-background">
         {/* Hero Section */}
         <section className="px-4 md:px-6 py-20 md:py-32 max-w-6xl mx-auto">
           <div className="text-center space-y-6">
@@ -40,16 +58,17 @@ export default function Landing() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-              <Link to="/dashboard">
-                <Button className="gap-2 bg-wellness-500 hover:bg-wellness-600 text-white px-8 py-6 text-base h-auto">
-                  Get Started
-                  <ArrowRight className="h-5 w-5" />
-                </Button>
-              </Link>
+              <Button
+                onClick={handleButtonClick}
+                className="gap-2 bg-wellness-500 hover:bg-wellness-600 text-white px-8 py-6 text-base h-auto"
+              >
+                Get Started
+                <ArrowRight className="h-5 w-5" />
+              </Button>
               <a href="#features">
                 <Button
                   variant="outline"
-                  className="border-wellness-300 text-wellness-600 hover:bg-wellness-50 px-8 py-6 text-base h-auto"
+                  className="border-wellness-300 text-wellness-600 hover:bg-wellness-900/50 px-8 py-6 text-base h-auto"
                 >
                   Learn More
                 </Button>
@@ -59,12 +78,12 @@ export default function Landing() {
 
           {/* Hero Image */}
           <div className="mt-20 relative">
-            <div className="absolute inset-0 bg-gradient-to-r from-wellness-200 via-growth-200 to-wellness-200 rounded-3xl blur-2xl opacity-30"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-wellness-200 via-growth-200 to-wellness-200 rounded-3xl blur-2xl opacity-10"></div>
             <div className="relative bg-card rounded-3xl border border-border p-8 md:p-12 shadow-xl">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="flex flex-col items-center text-center p-4">
-                  <div className="h-12 w-12 bg-wellness-100 rounded-lg flex items-center justify-center mb-4">
-                    <Brain className="h-6 w-6 text-wellness-600" />
+                  <div className="h-12 w-12 bg-wellness-900 rounded-lg flex items-center justify-center mb-4">
+                    <Brain className="h-6 w-6 text-wellness-400" />
                   </div>
                   <h3 className="font-semibold mb-2">MFI Score</h3>
                   <p className="text-sm text-muted-foreground">
@@ -73,8 +92,8 @@ export default function Landing() {
                 </div>
 
                 <div className="flex flex-col items-center text-center p-4">
-                  <div className="h-12 w-12 bg-growth-100 rounded-lg flex items-center justify-center mb-4">
-                    <Zap className="h-6 w-6 text-growth-600" />
+                  <div className="h-12 w-12 bg-growth-900 rounded-lg flex items-center justify-center mb-4">
+                    <Zap className="h-6 w-6 text-growth-400" />
                   </div>
                   <h3 className="font-semibold mb-2">Tokens</h3>
                   <p className="text-sm text-muted-foreground">
@@ -83,8 +102,8 @@ export default function Landing() {
                 </div>
 
                 <div className="flex flex-col items-center text-center p-4">
-                  <div className="h-12 w-12 bg-wellness-100 rounded-lg flex items-center justify-center mb-4">
-                    <Lock className="h-6 w-6 text-wellness-600" />
+                  <div className="h-12 w-12 bg-wellness-900 rounded-lg flex items-center justify-center mb-4">
+                    <Lock className="h-6 w-6 text-wellness-400" />
                   </div>
                   <h3 className="font-semibold mb-2">Blockchain</h3>
                   <p className="text-sm text-muted-foreground">
@@ -109,8 +128,8 @@ export default function Landing() {
             {/* Feature 1 */}
             <div className="space-y-4">
               <div className="flex items-start gap-4">
-                <div className="h-12 w-12 bg-wellness-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <Brain className="h-6 w-6 text-wellness-600" />
+                <div className="h-12 w-12 bg-wellness-900 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <Brain className="h-6 w-6 text-wellness-400" />
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold mb-2">MFI Score & SHAP</h3>
@@ -125,8 +144,8 @@ export default function Landing() {
             {/* Feature 2 */}
             <div className="space-y-4">
               <div className="flex items-start gap-4">
-                <div className="h-12 w-12 bg-growth-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <TrendingUp className="h-6 w-6 text-growth-600" />
+                <div className="h-12 w-12 bg-growth-900 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <TrendingUp className="h-6 w-6 text-growth-400" />
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold mb-2">
@@ -143,8 +162,8 @@ export default function Landing() {
             {/* Feature 3 */}
             <div className="space-y-4">
               <div className="flex items-start gap-4">
-                <div className="h-12 w-12 bg-wellness-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <Zap className="h-6 w-6 text-wellness-600" />
+                <div className="h-12 w-12 bg-wellness-900 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <Zap className="h-6 w-6 text-wellness-400" />
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold mb-2">
@@ -161,8 +180,8 @@ export default function Landing() {
             {/* Feature 4 */}
             <div className="space-y-4">
               <div className="flex items-start gap-4">
-                <div className="h-12 w-12 bg-growth-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <Vote className="h-6 w-6 text-growth-600" />
+                <div className="h-12 w-12 bg-growth-900 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <Vote className="h-6 w-6 text-growth-400" />
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold mb-2">DAO Governance</h3>
@@ -177,8 +196,8 @@ export default function Landing() {
             {/* Feature 5 */}
             <div className="space-y-4">
               <div className="flex items-start gap-4">
-                <div className="h-12 w-12 bg-wellness-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <ShoppingBag className="h-6 w-6 text-wellness-600" />
+                <div className="h-12 w-12 bg-wellness-900 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <ShoppingBag className="h-6 w-6 text-wellness-400" />
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold mb-2">Marketplace</h3>
@@ -193,8 +212,8 @@ export default function Landing() {
             {/* Feature 6 */}
             <div className="space-y-4">
               <div className="flex items-start gap-4">
-                <div className="h-12 w-12 bg-growth-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <Lock className="h-6 w-6 text-growth-600" />
+                <div className="h-12 w-12 bg-growth-900 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <Lock className="h-6 w-6 text-growth-400" />
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold mb-2">
@@ -214,25 +233,25 @@ export default function Landing() {
         <section className="px-4 md:px-6 py-20 max-w-6xl mx-auto border-t border-border">
           <div className="grid md:grid-cols-4 gap-8 text-center">
             <div>
-              <div className="text-3xl md:text-4xl font-bold text-wellness-600 mb-2">
+              <div className="text-3xl md:text-4xl font-bold text-wellness-400 mb-2">
                 100K+
               </div>
               <p className="text-muted-foreground">Active Users</p>
             </div>
             <div>
-              <div className="text-3xl md:text-4xl font-bold text-growth-600 mb-2">
+              <div className="text-3xl md:text-4xl font-bold text-growth-400 mb-2">
                 50M+
               </div>
               <p className="text-muted-foreground">SOT Distributed</p>
             </div>
             <div>
-              <div className="text-3xl md:text-4xl font-bold text-wellness-600 mb-2">
+              <div className="text-3xl md:text-4xl font-bold text-wellness-400 mb-2">
                 2.5M+
               </div>
               <p className="text-muted-foreground">NFTs Earned</p>
             </div>
             <div>
-              <div className="text-3xl md:text-4xl font-bold text-growth-600 mb-2">
+              <div className="text-3xl md:text-4xl font-bold text-growth-400 mb-2">
                 150+
               </div>
               <p className="text-muted-foreground">Active Proposals</p>
@@ -244,20 +263,21 @@ export default function Landing() {
         <section className="px-4 md:px-6 py-20 max-w-6xl mx-auto border-t border-border">
           <div className="relative">
             <div className="absolute inset-0 bg-gradient-to-r from-wellness-500 to-growth-500 rounded-3xl opacity-10 blur-2xl"></div>
-            <div className="relative bg-card border border-wellness-200 rounded-3xl p-12 text-center space-y-6">
+            <div className="relative bg-card border border-wellness-700 rounded-3xl p-12 text-center space-y-6">
               <h2 className="text-3xl md:text-4xl font-bold">
                 Ready to Take Control?
               </h2>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                Connect your wallet and start tracking your mental wellness today.
+                Sign up and start tracking your mental wellness today.
                 Measure your progress, heal your mind, and offset your stress.
               </p>
-              <Link to="/dashboard">
-                <Button className="gap-2 bg-wellness-500 hover:bg-wellness-600 text-white px-8 py-6 text-base h-auto">
-                  Connect Wallet
-                  <ChevronRight className="h-5 w-5" />
-                </Button>
-              </Link>
+              <Button
+                onClick={handleButtonClick}
+                className="gap-2 bg-wellness-500 hover:bg-wellness-600 text-white px-8 py-6 text-base h-auto"
+              >
+                Sign Up Now
+                <ChevronRight className="h-5 w-5" />
+              </Button>
             </div>
           </div>
         </section>
