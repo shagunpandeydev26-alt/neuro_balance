@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Layout } from "@/components/layout/Layout";
 import { AuthModal } from "@/components/auth/AuthModal";
@@ -18,12 +18,14 @@ import {
 export default function Landing() {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
 
   // If user is authenticated, redirect to dashboard
-  if (isAuthenticated) {
-    window.location.href = "/dashboard";
-    return null;
-  }
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/dashboard", { replace: true });
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleButtonClick = () => {
     setShowAuthModal(true);
