@@ -35,7 +35,7 @@ export default function Settings() {
     >
       <div className="px-4 md:px-8 py-8 max-w-4xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
+          <h1 className="text-3xl md:text-4xl font-bold font-display text-foreground mb-2">
             Settings
           </h1>
           <p className="text-muted-foreground">
@@ -45,7 +45,7 @@ export default function Settings() {
 
         <div className="space-y-6">
           {/* Notifications */}
-          <div className="bg-card border border-border rounded-2xl p-8 shadow-sm">
+          <div className="glass rounded-2xl p-8 shadow-sm">
             <h2 className="text-xl font-bold text-foreground mb-6 flex items-center gap-2">
               <Bell className="h-6 w-6" />
               Notifications
@@ -124,7 +124,7 @@ export default function Settings() {
           </div>
 
           {/* Appearance */}
-          <div className="bg-card border border-border rounded-2xl p-8 shadow-sm">
+          <div className="glass rounded-2xl p-8 shadow-sm">
             <h2 className="text-xl font-bold text-foreground mb-6 flex items-center gap-2">
               <Palette className="h-6 w-6" />
               Appearance
@@ -176,7 +176,7 @@ export default function Settings() {
           </div>
 
           {/* Privacy & Security */}
-          <div className="bg-card border border-border rounded-2xl p-8 shadow-sm">
+          <div className="glass rounded-2xl p-8 shadow-sm">
             <h2 className="text-xl font-bold text-foreground mb-6 flex items-center gap-2">
               <Lock className="h-6 w-6" />
               Privacy & Security
@@ -237,7 +237,7 @@ export default function Settings() {
           </div>
 
           {/* Active Sessions */}
-          <div className="bg-card border border-border rounded-2xl p-8 shadow-sm">
+          <div className="glass rounded-2xl p-8 shadow-sm">
             <h2 className="text-xl font-bold text-foreground mb-6 flex items-center gap-2">
               <Eye className="h-6 w-6" />
               Active Sessions

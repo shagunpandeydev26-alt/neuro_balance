@@ -1,42 +1,87 @@
 import { Layout } from "@/components/layout/Layout";
-import { Button } from "@/components/ui/button";
-import { Gift } from "lucide-react";
+import { useAuth } from "@/lib/auth-context";
+import { useNeuro } from "@/lib/neuro-store";
+import { BADGE_DEFINITIONS, type BadgeId } from "@shared/wellness";
+import { Lock } from "lucide-react";
+
+const TIER_RING: Record<string, string> = {
+  bronze: "border-amber-700/50",
+  silver: "border-slate-400/50",
+  gold: "border-yellow-500/60",
+};
+
+const TIER_GLOW: Record<string, string> = {
+  bronze: "from-amber-900/40",
+  silver: "from-slate-700/40",
+  gold: "from-yellow-700/40",
+};
 
 export default function NFTs() {
-  const walletAddress = "0x742d...8B2f";
+  const { user } = useAuth();
+  const { badges } = useNeuro();
+
+  const earnedMap = new Map(badges.map((b) => [b.id, b]));
+  const all = Object.values(BADGE_DEFINITIONS);
+  const earnedCount = all.filter((b) => earnedMap.has(b.id)).length;
 
   return (
-    <Layout isLoggedIn={true} walletAddress={walletAddress} showSidebar={true}>
-      <div className="px-4 md:px-8 py-8 max-w-7xl mx-auto">
+    <Layout isLoggedIn walletAddress={user?.walletAddress} showSidebar>
+      <div className="px-4 md:px-8 py-8 max-w-6xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
-            NFT Gallery
+          <h1 className="text-3xl md:text-4xl font-bold font-display text-foreground mb-2">
+            Proof-of-Care NFTs
           </h1>
           <p className="text-muted-foreground">
-            View your Proof-of-Care NFTs
+            Badges minted to your wallet for wellness milestones. {earnedCount}{" "}
+            of {all.length} unlocked.
           </p>
         </div>
 
-        <div className="bg-card border border-border rounded-2xl p-12 shadow-sm">
-          <div className="flex flex-col items-center justify-center text-center space-y-6">
-            <div className="h-16 w-16 bg-purple-100 rounded-full flex items-center justify-center">
-              <Gift className="h-8 w-8 text-purple-600" />
-            </div>
-            
-            <div className="space-y-3">
-              <h2 className="text-2xl font-bold text-foreground">
-                NFT Gallery
-              </h2>
-              <p className="text-muted-foreground max-w-md">
-                This page is ready to be built out. It will display your Proof-of-Care
-                NFTs with filtering by status and detailed information.
-              </p>
-            </div>
-
-            <Button className="bg-wellness-500 hover:bg-wellness-600">
-              Continue Building This Page
-            </Button>
-          </div>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {all.map((badge) => {
+            const earned = earnedMap.get(badge.id as BadgeId);
+            return (
+              <div
+                key={badge.id}
+                className={`relative rounded-2xl border-2 p-6 shadow-sm transition-all ${
+                  earned
+                    ? `bg-gradient-to-br ${TIER_GLOW[badge.tier]} to-card ${TIER_RING[badge.tier]}`
+                    : "bg-card border-border opacity-60"
+                }`}
+              >
+                <div className="flex items-start justify-between mb-4">
+                  <div
+                    className={`text-5xl ${earned ? "" : "grayscale opacity-50"}`}
+                  >
+                    {badge.emblem}
+                  </div>
+                  <span
+                    className={`text-xs font-semibold uppercase tracking-wide px-2 py-1 rounded-full ${
+                      badge.tier === "gold"
+                        ? "bg-yellow-500/20 text-yellow-600"
+                        : badge.tier === "silver"
+                          ? "bg-slate-400/20 text-slate-500"
+                          : "bg-amber-700/20 text-amber-700"
+                    }`}
+                  >
+                    {badge.tier}
+                  </span>
+                </div>
+                <h3 className="font-bold text-foreground mb-1 flex items-center gap-2">
+                  {badge.name}
+                  {!earned && <Lock className="h-3.5 w-3.5 text-muted-foreground" />}
+                </h3>
+                <p className="text-sm text-muted-foreground">
+                  {badge.description}
+                </p>
+                {earned && (
+                  <p className="text-xs text-growth-500 mt-3 font-medium">
+                    Minted {new Date(earned.timestamp).toLocaleDateString()}
+                  </p>
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
     </Layout>

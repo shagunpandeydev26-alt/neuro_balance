@@ -1,11 +1,12 @@
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/auth-context";
+import { generateWalletAddress } from "@/lib/chain";
 import { User, Mail, Wallet, Copy, Check } from "lucide-react";
 import { useState } from "react";
 
 export default function Profile() {
-  const { user, connectWallet } = useAuth();
+  const { user, connectWallet, disconnectWallet } = useAuth();
   const [copied, setCopied] = useState(false);
 
   const handleCopyAddress = () => {
@@ -17,11 +18,7 @@ export default function Profile() {
   };
 
   const handleConnectWallet = () => {
-    const walletAddress =
-      "0x" +
-      Math.random().toString(16).slice(2, 14) +
-      Math.random().toString(16).slice(2, 14);
-    connectWallet(walletAddress);
+    connectWallet(generateWalletAddress());
   };
 
   return (
@@ -32,7 +29,7 @@ export default function Profile() {
     >
       <div className="px-4 md:px-8 py-8 max-w-4xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
+          <h1 className="text-3xl md:text-4xl font-bold font-display text-foreground mb-2">
             Profile
           </h1>
           <p className="text-muted-foreground">
@@ -42,7 +39,7 @@ export default function Profile() {
 
         <div className="space-y-8">
           {/* Profile Picture and Basic Info */}
-          <div className="bg-card border border-border rounded-2xl p-8 shadow-sm">
+          <div className="glass rounded-2xl p-8 shadow-sm">
             <div className="flex flex-col md:flex-row gap-8 md:items-start">
               {/* Avatar */}
               <div className="flex flex-col items-center md:items-start">
@@ -94,7 +91,7 @@ export default function Profile() {
           </div>
 
           {/* Wallet Connection */}
-          <div className="bg-card border border-border rounded-2xl p-8 shadow-sm">
+          <div className="glass rounded-2xl p-8 shadow-sm">
             <h2 className="text-xl font-bold text-foreground mb-6 flex items-center gap-2">
               <Wallet className="h-6 w-6" />
               Wallet Connection
@@ -130,6 +127,7 @@ export default function Profile() {
                 </div>
 
                 <Button
+                  onClick={disconnectWallet}
                   variant="outline"
                   className="border-destructive text-destructive hover:bg-destructive/10"
                 >
@@ -153,7 +151,7 @@ export default function Profile() {
           </div>
 
           {/* Account Actions */}
-          <div className="bg-card border border-border rounded-2xl p-8 shadow-sm">
+          <div className="glass rounded-2xl p-8 shadow-sm">
             <h2 className="text-xl font-bold text-foreground mb-6">
               Account Actions
             </h2>

@@ -1,7 +1,28 @@
+import { useMemo } from "react";
+import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/auth-context";
-import { ArrowUpRight, TrendingUp, Zap, Gift, Wallet } from "lucide-react";
+import { useNeuro } from "@/lib/neuro-store";
+import { ACTIVITY_DEFINITIONS, BADGE_DEFINITIONS } from "@shared/wellness";
+import {
+  Reveal,
+  RevealGroup,
+  RevealItem,
+  RadialScore,
+  AnimatedCounter,
+} from "@/components/motion";
+import {
+  ArrowUpRight,
+  ArrowDownRight,
+  TrendingUp,
+  Zap,
+  Gift,
+  ClipboardCheck,
+  ShieldCheck,
+  Flame,
+} from "lucide-react";
 import {
   LineChart,
   Line,
@@ -12,278 +33,328 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const mfiData = [
-  { date: "Jan 1", score: 45 },
-  { date: "Jan 8", score: 52 },
-  { date: "Jan 15", score: 48 },
-  { date: "Jan 22", score: 61 },
-  { date: "Jan 29", score: 58 },
-  { date: "Feb 5", score: 67 },
-  { date: "Feb 12", score: 72 },
-];
-
-const activities = [
-  {
-    id: 1,
-    type: "score_update",
-    title: "MFI Score Updated",
-    description: "Your Mental Fitness Index increased to 72",
-    time: "2 hours ago",
-    icon: TrendingUp,
-  },
-  {
-    id: 2,
-    type: "nft_earned",
-    title: "NFT Earned",
-    description: "Proof-of-Care NFT: Week 5 Warrior",
-    time: "1 day ago",
-    icon: Gift,
-  },
-  {
-    id: 3,
-    type: "tokens_minted",
-    title: "Tokens Minted",
-    description: "250 SOT minted for stress offset",
-    time: "3 days ago",
-    icon: Zap,
-  },
-];
-
 export default function Dashboard() {
-  const { user, connectWallet } = useAuth();
+  const { user } = useAuth();
+  const { assessments, activities, badges, stats } = useNeuro();
 
-  const mfiScore = 72;
-  const mfiTrend = 7;
-  const tokenBalance = 1250;
-  const nftCount = 12;
+  const chartData = useMemo(
+    () =>
+      [...assessments]
+        .sort((a, b) => a.timestamp - b.timestamp)
+        .map((a) => ({
+          date: new Date(a.timestamp).toLocaleDateString("en-US", {
+            month: "short",
+            day: "numeric",
+          }),
+          score: a.score,
+        })),
+    [assessments],
+  );
 
-  const handleConnectWallet = () => {
-    const walletAddress =
-      "0x" +
-      Math.random().toString(16).slice(2, 14) +
-      Math.random().toString(16).slice(2, 14);
-    connectWallet(walletAddress);
+  const feed = useMemo(() => {
+    const items: {
+      id: string;
+      title: string;
+      description: string;
+      time: number;
+      icon: typeof TrendingUp;
+    }[] = [];
+    assessments.forEach((a) =>
+      items.push({
+        id: a.id,
+        title: "MFI Recorded",
+        description: `Mental Footprint Index ${a.score} (${a.band})`,
+        time: a.timestamp,
+        icon: TrendingUp,
+      }),
+    );
+    activities.forEach((a) =>
+      items.push({
+        id: a.id,
+        title: "Activity Verified",
+        description: `${ACTIVITY_DEFINITIONS[a.type].label} · +${a.reward} SOC`,
+        time: a.timestamp,
+        icon: ShieldCheck,
+      }),
+    );
+    badges.forEach((b) =>
+      items.push({
+        id: b.id + b.timestamp,
+        title: "Badge Unlocked",
+        description: `${BADGE_DEFINITIONS[b.id].emblem} ${BADGE_DEFINITIONS[b.id].name}`,
+        time: b.timestamp,
+        icon: Gift,
+      }),
+    );
+    return items.sort((a, b) => b.time - a.time).slice(0, 6);
+  }, [assessments, activities, badges]);
+
+  const timeAgo = (ts: number) => {
+    const mins = Math.floor((Date.now() - ts) / 60000);
+    if (mins < 1) return "just now";
+    if (mins < 60) return `${mins}m ago`;
+    const hrs = Math.floor(mins / 60);
+    if (hrs < 24) return `${hrs}h ago`;
+    return `${Math.floor(hrs / 24)}d ago`;
   };
 
+  const hasData = stats.assessmentCount > 0;
+
   return (
-    <Layout
-      isLoggedIn={true}
-      walletAddress={user?.walletAddress}
-      showSidebar={true}
-    >
+    <Layout isLoggedIn walletAddress={user?.walletAddress} showSidebar>
       <div className="px-4 md:px-8 py-8 max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
-            Dashboard
-          </h1>
-          <p className="text-muted-foreground">
-            Welcome back! Here's your mental wellness summary.
-          </p>
-        </div>
-
-        {/* MFI Score Card */}
-        <div className="grid md:grid-cols-3 gap-6 mb-8">
-          {/* Main MFI Card */}
-          <div className="md:col-span-1 bg-gradient-to-br from-wellness-900 to-wellness-800 border border-wellness-700 rounded-2xl p-8 shadow-md">
-            <div className="space-y-6">
-              <div>
-                <p className="text-sm font-medium text-wellness-400 mb-2">
-                  MFI Score
-                </p>
-                <div className="flex items-baseline gap-3">
-                  <span className="text-5xl font-bold text-wellness-300">
-                    {mfiScore}
-                  </span>
-                  <span className="text-sm text-wellness-400">/100</span>
-                </div>
-              </div>
-
-              <div className="space-y-3">
-                <div className="h-2 bg-wellness-700 rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-gradient-to-r from-wellness-500 to-wellness-400 rounded-full transition-all"
-                    style={{ width: `${mfiScore}%` }}
-                  ></div>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <ArrowUpRight className="h-4 w-4 text-growth-400" />
-                  <span className="text-sm font-medium text-growth-400">
-                    +{mfiTrend} this week
-                  </span>
-                </div>
-              </div>
-
-              <div className="pt-4 border-t border-wellness-700">
-                <p className="text-xs font-medium text-wellness-400 mb-3">
-                  Risk Status
-                </p>
-                <div className="flex items-center gap-2">
-                  <div className="h-3 w-3 bg-growth-500 rounded-full"></div>
-                  <span className="text-sm font-medium text-foreground">
-                    Low
-                  </span>
-                </div>
-              </div>
-
-              <Button className="w-full bg-wellness-600 hover:bg-wellness-700 text-white">
-                View Details
-              </Button>
+        <Reveal>
+          <div className="mb-8 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+            <div>
+              <h1 className="text-3xl md:text-4xl font-bold font-display mb-2">
+                Welcome back, {user?.name?.split(" ")[0] || "there"}
+              </h1>
+              <p className="text-muted-foreground">
+                Here's your mental wellness summary.
+              </p>
             </div>
+            <Link to="/assessment">
+              <Button className="gap-2 bg-wellness-500 hover:bg-wellness-400 text-white glow-primary">
+                <ClipboardCheck className="h-4 w-4" />
+                New Assessment
+              </Button>
+            </Link>
           </div>
+        </Reveal>
 
-          {/* Token Card */}
-          <div className="bg-gradient-to-br from-growth-900 to-growth-800 border border-growth-700 rounded-2xl p-8 shadow-md">
-            <div className="space-y-6">
-              <div className="flex items-start justify-between">
-                <div>
-                  <p className="text-sm font-medium text-growth-400 mb-2">
-                    SOT Balance
+        {!hasData ? (
+          <Reveal>
+            <div className="glass-strong ring-gradient rounded-3xl p-12 text-center">
+              <div className="h-16 w-16 bg-wellness-900 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <ClipboardCheck className="h-8 w-8 text-wellness-300" />
+              </div>
+              <h2 className="text-2xl font-bold font-display mb-2">
+                Measure your Mental Footprint
+              </h2>
+              <p className="text-muted-foreground max-w-md mx-auto mb-6">
+                Take your first wellness assessment to generate your MFI, earn
+                Stress Offset Credits, and unlock Proof-of-Care badges.
+              </p>
+              <Link to="/assessment">
+                <Button className="bg-wellness-500 hover:bg-wellness-400 text-white gap-2 glow-primary">
+                  <ClipboardCheck className="h-4 w-4" />
+                  Start Assessment
+                </Button>
+              </Link>
+            </div>
+          </Reveal>
+        ) : (
+          <>
+            <RevealGroup className="grid md:grid-cols-3 gap-6 mb-6">
+              {/* MFI radial */}
+              <RevealItem className="md:col-span-1">
+                <div className="glass-strong ring-gradient rounded-3xl p-8 h-full flex flex-col items-center justify-center">
+                  <RadialScore value={stats.latestScore ?? 0} size={200} />
+                  <div className="mt-5 flex items-center gap-3">
+                    <span className="text-sm font-medium text-foreground">
+                      {stats.riskBand}
+                    </span>
+                    {stats.scoreTrend !== null && (
+                      <span
+                        className={`inline-flex items-center gap-1 text-sm font-medium ${
+                          stats.scoreTrend >= 0
+                            ? "text-growth-300"
+                            : "text-destructive"
+                        }`}
+                      >
+                        {stats.scoreTrend >= 0 ? (
+                          <ArrowUpRight className="h-4 w-4" />
+                        ) : (
+                          <ArrowDownRight className="h-4 w-4" />
+                        )}
+                        {stats.scoreTrend >= 0 ? "+" : ""}
+                        {stats.scoreTrend}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </RevealItem>
+
+              {/* Side stat cards */}
+              <RevealItem className="md:col-span-2">
+                <div className="grid sm:grid-cols-2 gap-6 h-full">
+                  <StatCard
+                    icon={Zap}
+                    iconClass="text-growth-300"
+                    label="SOC Balance"
+                    value={stats.balance}
+                    sub={`${stats.totalEarned} earned lifetime`}
+                    to="/tokens"
+                    cta="Manage tokens"
+                  />
+                  <StatCard
+                    icon={Gift}
+                    iconClass="text-secondary"
+                    label="Proof-of-Care"
+                    value={stats.badgeCount}
+                    sub={`${stats.activityCount} activities verified`}
+                    to="/nfts"
+                    cta="View gallery"
+                  />
+                  <StatCard
+                    icon={Flame}
+                    iconClass="text-amber-400"
+                    label="Recovery Streak"
+                    value={stats.streak}
+                    suffix=" days"
+                    sub="Keep the momentum going"
+                    to="/activities"
+                    cta="Log activity"
+                  />
+                  <StatCard
+                    icon={TrendingUp}
+                    iconClass="text-wellness-300"
+                    label="Assessments"
+                    value={stats.assessmentCount}
+                    sub="Total logged"
+                    to="/assessment"
+                    cta="Reassess"
+                  />
+                </div>
+              </RevealItem>
+            </RevealGroup>
+
+            {/* Chart */}
+            <Reveal>
+              <div className="glass rounded-3xl p-6 md:p-8 mb-6">
+                <div className="mb-6">
+                  <h2 className="text-xl font-bold font-display">MFI Trend</h2>
+                  <p className="text-sm text-muted-foreground">
+                    Your Mental Footprint Index over time
                   </p>
-                  <div className="text-3xl font-bold text-growth-300">
-                    {tokenBalance}
-                  </div>
                 </div>
-                <div className="h-12 w-12 bg-growth-800 rounded-lg flex items-center justify-center">
-                  <Zap className="h-6 w-6 text-growth-400" />
+                <ResponsiveContainer width="100%" height={300}>
+                  <LineChart data={chartData}>
+                    <defs>
+                      <linearGradient id="dashLine" x1="0" y1="0" x2="1" y2="0">
+                        <stop offset="0%" stopColor="hsl(243 82% 63%)" />
+                        <stop offset="100%" stopColor="hsl(187 92% 56%)" />
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid
+                      strokeDasharray="3 3"
+                      stroke="hsl(var(--border))"
+                    />
+                    <XAxis
+                      dataKey="date"
+                      stroke="hsl(var(--muted-foreground))"
+                      style={{ fontSize: "12px" }}
+                    />
+                    <YAxis
+                      stroke="hsl(var(--muted-foreground))"
+                      style={{ fontSize: "12px" }}
+                      domain={[0, 100]}
+                    />
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: "hsl(var(--popover))",
+                        border: "1px solid hsl(var(--border))",
+                        borderRadius: "12px",
+                      }}
+                      labelStyle={{ color: "hsl(var(--foreground))" }}
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="score"
+                      stroke="url(#dashLine)"
+                      strokeWidth={3}
+                      dot={{ fill: "hsl(187 92% 56%)", r: 4 }}
+                      activeDot={{ r: 6 }}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+            </Reveal>
+
+            {/* Feed */}
+            <Reveal>
+              <div className="glass rounded-3xl p-6 md:p-8">
+                <h2 className="text-xl font-bold font-display mb-6">
+                  Latest Activity
+                </h2>
+                <div className="space-y-2">
+                  {feed.map((activity) => {
+                    const Icon = activity.icon;
+                    return (
+                      <motion.div
+                        key={activity.id}
+                        whileHover={{ x: 4 }}
+                        className="flex items-start gap-4 p-3 hover:bg-white/5 rounded-xl transition-colors"
+                      >
+                        <div className="h-10 w-10 rounded-full bg-wellness-900 flex items-center justify-center flex-shrink-0">
+                          <Icon className="h-5 w-5 text-wellness-300" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="font-semibold text-foreground text-sm">
+                            {activity.title}
+                          </p>
+                          <p className="text-sm text-muted-foreground">
+                            {activity.description}
+                          </p>
+                        </div>
+                        <div className="flex-shrink-0 text-xs text-muted-foreground">
+                          {timeAgo(activity.time)}
+                        </div>
+                      </motion.div>
+                    );
+                  })}
                 </div>
               </div>
-
-              <div className="space-y-2">
-                <p className="text-xs font-medium text-growth-400">
-                  Equivalent Value
-                </p>
-                <p className="text-2xl font-bold text-growth-300">
-                  ${(tokenBalance * 0.45).toFixed(2)}
-                </p>
-              </div>
-
-              <Button
-                variant="outline"
-                className="w-full border-growth-700 text-growth-400 hover:bg-growth-900/50"
-              >
-                Offset Stress
-              </Button>
-            </div>
-          </div>
-
-          {/* NFT Card */}
-          <div className="bg-gradient-to-br from-purple-900 to-purple-800 border border-purple-700 rounded-2xl p-8 shadow-md">
-            <div className="space-y-6">
-              <div className="flex items-start justify-between">
-                <div>
-                  <p className="text-sm font-medium text-purple-400 mb-2">
-                    Proof-of-Care NFTs
-                  </p>
-                  <div className="text-3xl font-bold text-purple-300">
-                    {nftCount}
-                  </div>
-                </div>
-                <div className="h-12 w-12 bg-purple-800 rounded-lg flex items-center justify-center">
-                  <Gift className="h-6 w-6 text-purple-400" />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <p className="text-xs font-medium text-purple-400">
-                  Latest Achievement
-                </p>
-                <p className="text-sm font-semibold text-foreground">
-                  Week 5 Warrior
-                </p>
-              </div>
-
-              <Button
-                variant="outline"
-                className="w-full border-purple-700 text-purple-400 hover:bg-purple-900/50"
-              >
-                View Gallery
-              </Button>
-            </div>
-          </div>
-        </div>
-
-        {/* Chart Section */}
-        <div className="bg-card border border-border rounded-2xl p-8 mb-8 shadow-sm">
-          <div className="mb-6">
-            <h2 className="text-xl font-bold text-foreground mb-2">
-              MFI Trend
-            </h2>
-            <p className="text-sm text-muted-foreground">
-              Your Mental Fitness Index over the last 6 weeks
-            </p>
-          </div>
-
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={mfiData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
-              <XAxis
-                dataKey="date"
-                stroke="var(--muted-foreground)"
-                style={{ fontSize: "12px" }}
-              />
-              <YAxis
-                stroke="var(--muted-foreground)"
-                style={{ fontSize: "12px" }}
-                domain={[0, 100]}
-              />
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: "var(--card)",
-                  border: "1px solid var(--border)",
-                  borderRadius: "8px",
-                }}
-                labelStyle={{ color: "var(--foreground)" }}
-              />
-              <Line
-                type="monotone"
-                dataKey="score"
-                stroke="hsl(var(--wellness-500))"
-                strokeWidth={2}
-                dot={{ fill: "hsl(var(--wellness-500))", r: 4 }}
-                activeDot={{ r: 6 }}
-              />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
-
-        {/* Activity Feed */}
-        <div className="bg-card border border-border rounded-2xl p-8 shadow-sm">
-          <h2 className="text-xl font-bold text-foreground mb-6">
-            Latest Activity
-          </h2>
-
-          <div className="space-y-4">
-            {activities.map((activity) => {
-              const Icon = activity.icon;
-              return (
-                <div
-                  key={activity.id}
-                  className="flex items-start gap-4 p-4 hover:bg-muted rounded-lg transition-colors"
-                >
-                  <div className="h-10 w-10 rounded-full bg-wellness-900 flex items-center justify-center flex-shrink-0">
-                    <Icon className="h-5 w-5 text-wellness-400" />
-                  </div>
-
-                  <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-foreground text-sm">
-                      {activity.title}
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      {activity.description}
-                    </p>
-                  </div>
-
-                  <div className="flex-shrink-0 text-xs text-muted-foreground">
-                    {activity.time}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
+            </Reveal>
+          </>
+        )}
       </div>
     </Layout>
+  );
+}
+
+function StatCard({
+  icon: Icon,
+  iconClass,
+  label,
+  value,
+  suffix,
+  sub,
+  to,
+  cta,
+}: {
+  icon: typeof Zap;
+  iconClass: string;
+  label: string;
+  value: number;
+  suffix?: string;
+  sub: string;
+  to: string;
+  cta: string;
+}) {
+  return (
+    <motion.div
+      whileHover={{ y: -4 }}
+      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+      className="glass rounded-2xl p-6 flex flex-col"
+    >
+      <div className="flex items-center justify-between mb-4">
+        <p className="text-sm font-medium text-muted-foreground">{label}</p>
+        <div className="h-10 w-10 rounded-lg glass-strong flex items-center justify-center">
+          <Icon className={`h-5 w-5 ${iconClass}`} />
+        </div>
+      </div>
+      <div className="text-3xl font-bold font-display">
+        <AnimatedCounter value={value} suffix={suffix} />
+      </div>
+      <p className="text-xs text-muted-foreground mt-1 flex-1">{sub}</p>
+      <Link
+        to={to}
+        className="text-sm text-wellness-300 hover:text-wellness-200 font-medium mt-4 inline-flex items-center gap-1"
+      >
+        {cta}
+        <ArrowUpRight className="h-3.5 w-3.5" />
+      </Link>
+    </motion.div>
   );
 }
