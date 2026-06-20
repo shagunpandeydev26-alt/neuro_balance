@@ -10,6 +10,8 @@ A blockchain-powered wellness platform that quantifies mental well-being, verifi
 activities, and turns positive mental-health actions into measurable value through a transparent
 **Stress Offset Economy**.
 
+### 🌐 [**Live Demo → neuro-balancee.netlify.app**](https://neuro-balancee.netlify.app/)
+
 </div>
 
 ---
@@ -167,8 +169,9 @@ UI logic:
 
 ## ☁️ Deployment
 
-Configured for **Netlify** (see [`netlify.toml`](netlify.toml)); the SPA also builds to `dist/spa`
-for any static host, with the Express server bundled to `dist/server`.
+Live at **[neuro-balancee.netlify.app](https://neuro-balancee.netlify.app/)**, deployed on
+**Netlify** (see [`netlify.toml`](netlify.toml)). The SPA builds to `dist/spa` for any static host,
+with the Express server bundled to `dist/server`.
 
 ```bash
 pnpm build
