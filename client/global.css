@@ -1,5 +1,5 @@
 /** @import must precede all other statements */
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -7,140 +7,87 @@
 
 @layer base {
   /**
-   * Tailwind CSS theme
-   * tailwind.config.ts expects the following color variables to be expressed as HSL values.
-   * A different format will require also updating the theme in tailwind.config.ts.
-   * 
-   * NeuroBalance Wellness Color Palette:
-   * - Wellness (Blue): Primary interactive elements and data
-   * - Growth (Green): Success, positive metrics, and achievements
-   * - Neutrals: Clean backgrounds and text
-  */
-  :root {
-    --background: 240 30% 97%;
-    --foreground: 240 10% 3.9%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
-
-    --primary: 218 100% 48%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 170 100% 45%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 240 5% 84.9%;
-    --muted-foreground: 240 5.3% 26.1%;
-
-    --accent: 170 76% 51%;
-    --accent-foreground: 0 0% 100%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 240 5% 91.4%;
-    --input: 240 5% 91.4%;
-    --ring: 218 100% 48%;
-
-    --radius: 0.75rem;
-
-    /* Sidebar colors */
-    --sidebar-background: 240 30% 97%;
-    --sidebar-foreground: 240 10% 3.9%;
-    --sidebar-primary: 218 100% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 240 5% 91.4%;
-    --sidebar-ring: 218 100% 48%;
-
-    /* Wellness blue palette */
-    --wellness-50: 219 100% 96%;
-    --wellness-100: 219 100% 92%;
-    --wellness-200: 219 98% 85%;
-    --wellness-300: 218 98% 76%;
-    --wellness-400: 218 97% 65%;
-    --wellness-500: 218 100% 48%;
-    --wellness-600: 217 89% 40%;
-    --wellness-700: 216 84% 33%;
-    --wellness-800: 216 74% 27%;
-    --wellness-900: 215 68% 21%;
-
-    /* Growth green palette */
-    --growth-50: 152 100% 95%;
-    --growth-100: 152 100% 90%;
-    --growth-200: 151 97% 80%;
-    --growth-300: 150 98% 67%;
-    --growth-400: 170 76% 51%;
-    --growth-500: 170 100% 45%;
-    --growth-600: 169 80% 39%;
-    --growth-700: 168 74% 32%;
-    --growth-800: 167 68% 26%;
-    --growth-900: 166 62% 21%;
-  }
-
+   * NeuroBalance premium dark theme.
+   *
+   * Identity: Deep Indigo (primary) · Electric Cyan (secondary) ·
+   * Emerald (accent) on a near-black canvas with dark-slate glass surfaces.
+   *
+   * Color scales are exposed as HSL channel triples ("H S% L%") so Tailwind
+   * tokens like `bg-wellness-500` resolve via `hsl(var(--wellness-500))`.
+   * `wellness-*` = indigo ramp, `growth-*` = emerald ramp. Standard
+   * orientation: low numbers are light, high numbers are dark.
+   *
+   * The app renders dark by default (`<html class="dark">`); :root mirrors the
+   * dark values so it is robust even without the class.
+   */
+  :root,
   .dark {
-    --background: 240 10% 3.9%;
-    --foreground: 210 40% 98%;
+    --background: 240 30% 4%;
+    --foreground: 220 24% 96%;
 
-    --card: 240 13% 12%;
-    --card-foreground: 210 40% 98%;
+    --card: 235 24% 8%;
+    --card-foreground: 220 24% 96%;
 
-    --popover: 240 13% 12%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 236 26% 7%;
+    --popover-foreground: 220 24% 96%;
 
-    --primary: 218 98% 55%;
-    --primary-foreground: 240 10% 3.9%;
+    --primary: 243 80% 64%;
+    --primary-foreground: 240 30% 98%;
 
-    --secondary: 170 76% 51%;
-    --secondary-foreground: 240 10% 3.9%;
+    --secondary: 187 92% 52%;
+    --secondary-foreground: 235 40% 6%;
 
-    --muted: 240 14% 28%;
-    --muted-foreground: 240 5.2% 74.9%;
+    --muted: 235 16% 15%;
+    --muted-foreground: 235 12% 64%;
 
-    --accent: 170 76% 51%;
-    --accent-foreground: 240 10% 3.9%;
+    --accent: 160 84% 46%;
+    --accent-foreground: 235 40% 6%;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 72% 56%;
+    --destructive-foreground: 220 24% 98%;
 
-    --border: 240 13% 23%;
-    --input: 240 13% 23%;
-    --ring: 218 98% 55%;
+    --warning: 38 92% 55%;
+    --success: 160 84% 46%;
 
-    --sidebar-background: 240 10% 8%;
-    --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 218 98% 55%;
-    --sidebar-primary-foreground: 240 10% 3.9%;
-    --sidebar-accent: 240 13% 23%;
-    --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 240 13% 23%;
-    --sidebar-ring: 218 98% 55%;
+    --border: 235 18% 16%;
+    --input: 235 18% 16%;
+    --ring: 243 80% 64%;
 
-    --wellness-50: 219 85% 15%;
-    --wellness-100: 219 73% 17%;
-    --wellness-200: 219 68% 22%;
-    --wellness-300: 218 62% 30%;
-    --wellness-400: 218 98% 42%;
-    --wellness-500: 218 100% 48%;
-    --wellness-600: 218 95% 55%;
-    --wellness-700: 219 100% 66%;
-    --wellness-800: 219 100% 76%;
-    --wellness-900: 219 100% 86%;
+    --radius: 0.85rem;
 
-    --growth-50: 152 85% 15%;
-    --growth-100: 152 73% 17%;
-    --growth-200: 151 68% 22%;
-    --growth-300: 150 62% 30%;
-    --growth-400: 170 76% 45%;
-    --growth-500: 170 100% 45%;
-    --growth-600: 169 80% 50%;
-    --growth-700: 168 74% 60%;
-    --growth-800: 167 68% 70%;
-    --growth-900: 166 62% 80%;
+    /* Sidebar */
+    --sidebar-background: 236 28% 5%;
+    --sidebar-foreground: 220 20% 88%;
+    --sidebar-primary: 243 80% 64%;
+    --sidebar-primary-foreground: 240 30% 98%;
+    --sidebar-accent: 235 18% 13%;
+    --sidebar-accent-foreground: 220 24% 96%;
+    --sidebar-border: 235 18% 13%;
+    --sidebar-ring: 243 80% 64%;
+
+    /* Indigo (primary) ramp — used via wellness-* */
+    --wellness-50: 244 100% 96%;
+    --wellness-100: 243 100% 92%;
+    --wellness-200: 244 96% 86%;
+    --wellness-300: 245 93% 79%;
+    --wellness-400: 244 91% 72%;
+    --wellness-500: 243 82% 63%;
+    --wellness-600: 244 72% 53%;
+    --wellness-700: 245 66% 42%;
+    --wellness-800: 246 56% 28%;
+    --wellness-900: 248 50% 17%;
+
+    /* Emerald (accent) ramp — used via growth-* */
+    --growth-50: 160 90% 95%;
+    --growth-100: 160 85% 88%;
+    --growth-200: 159 80% 77%;
+    --growth-300: 159 77% 65%;
+    --growth-400: 160 79% 53%;
+    --growth-500: 160 84% 45%;
+    --growth-600: 161 80% 38%;
+    --growth-700: 162 74% 30%;
+    --growth-800: 163 66% 22%;
+    --growth-900: 164 60% 15%;
   }
 }
 
@@ -149,8 +96,16 @@
     @apply border-border;
   }
 
+  html {
+    color-scheme: dark;
+    scroll-behavior: smooth;
+  }
+
   body {
     @apply bg-background text-foreground;
+    font-feature-settings:
+      "cv02", "cv03", "cv04", "cv11";
+    -webkit-font-smoothing: antialiased;
   }
 
   :where(p, span, li, h1, h2, h3, h4, h5, h6, a, button, label, td, th) {
@@ -162,5 +117,111 @@
   code {
     overflow-x: auto;
     white-space: pre;
+  }
+
+  /* Premium custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: hsl(235 18% 20%);
+    border-radius: 9999px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(243 40% 36%);
+    background-clip: padding-box;
+  }
+
+  ::selection {
+    background: hsl(243 82% 63% / 0.35);
+  }
+}
+
+@layer components {
+  /* Glassmorphism surfaces (use sparingly) */
+  .glass {
+    background: hsl(235 24% 10% / 0.55);
+    backdrop-filter: blur(18px) saturate(140%);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    border: 1px solid hsl(0 0% 100% / 0.06);
+  }
+  .glass-strong {
+    background: hsl(235 24% 11% / 0.78);
+    backdrop-filter: blur(24px) saturate(160%);
+    -webkit-backdrop-filter: blur(24px) saturate(160%);
+    border: 1px solid hsl(0 0% 100% / 0.08);
+  }
+
+  /* Indigo → cyan brand text gradient */
+  .text-gradient {
+    background-image: linear-gradient(
+      100deg,
+      hsl(244 91% 76%),
+      hsl(187 92% 60%) 55%,
+      hsl(160 84% 56%)
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Hairline gradient ring used on premium cards */
+  .ring-gradient {
+    position: relative;
+  }
+  .ring-gradient::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(
+      140deg,
+      hsl(243 82% 63% / 0.6),
+      hsl(187 92% 52% / 0.25) 40%,
+      transparent 70%
+    );
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  .glow-primary {
+    box-shadow:
+      0 0 0 1px hsl(243 82% 63% / 0.25),
+      0 18px 60px -20px hsl(243 82% 63% / 0.55);
+  }
+
+  /* Subtle dotted grid backdrop */
+  .bg-grid {
+    background-image: radial-gradient(
+      hsl(235 20% 26% / 0.5) 1px,
+      transparent 1px
+    );
+    background-size: 28px 28px;
+  }
+}
+
+@layer utilities {
+  .animation-delay-200 {
+    animation-delay: 0.2s;
+  }
+  .animation-delay-500 {
+    animation-delay: 0.5s;
+  }
+  .animation-delay-1000 {
+    animation-delay: 1s;
+  }
+  .[perspective\:1000px] {
+    perspective: 1000px;
   }
 }
