@@ -1,42 +1,113 @@
+import { useState } from "react";
+import { toast } from "sonner";
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
-import { ShoppingBag } from "lucide-react";
+import { useAuth } from "@/lib/auth-context";
+import { useNeuro, MARKETPLACE_ITEMS } from "@/lib/neuro-store";
+import { Zap, Check, Loader2 } from "lucide-react";
+
+const CATEGORY_LABEL: Record<string, string> = {
+  bundle: "Bundle",
+  service: "Service",
+  premium: "Premium",
+};
 
 export default function Marketplace() {
-  const walletAddress = "0x742d...8B2f";
+  const { user } = useAuth();
+  const { stats, purchases, purchaseItem } = useNeuro();
+  const [busyId, setBusyId] = useState<string | null>(null);
+
+  const ownedIds = new Set(purchases.map((p) => p.itemId));
+
+  const handleBuy = async (id: string) => {
+    setBusyId(id);
+    try {
+      await purchaseItem(id);
+      toast.success("Purchase complete", {
+        description: "Settled via the Marketplace contract.",
+      });
+    } catch (err) {
+      toast.error("Purchase failed", {
+        description: err instanceof Error ? err.message : "Please try again.",
+      });
+    } finally {
+      setBusyId(null);
+    }
+  };
 
   return (
-    <Layout isLoggedIn={true} walletAddress={walletAddress} showSidebar={true}>
-      <div className="px-4 md:px-8 py-8 max-w-7xl mx-auto">
-        <div className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
-            Marketplace
-          </h1>
-          <p className="text-muted-foreground">
-            Browse wellness bundles and premium features
-          </p>
+    <Layout isLoggedIn walletAddress={user?.walletAddress} showSidebar>
+      <div className="px-4 md:px-8 py-8 max-w-6xl mx-auto">
+        <div className="mb-8 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+          <div>
+            <h1 className="text-3xl md:text-4xl font-bold font-display text-foreground mb-2">
+              Marketplace
+            </h1>
+            <p className="text-muted-foreground">
+              Redeem your Stress Offset Credits for wellness bundles and
+              services.
+            </p>
+          </div>
+          <div className="flex items-center gap-2 px-4 py-2 bg-growth-900/30 border border-growth-700 rounded-lg">
+            <Zap className="h-5 w-5 text-growth-400" />
+            <span className="font-semibold text-growth-400">
+              {stats.balance} SOC
+            </span>
+          </div>
         </div>
 
-        <div className="bg-card border border-border rounded-2xl p-12 shadow-sm">
-          <div className="flex flex-col items-center justify-center text-center space-y-6">
-            <div className="h-16 w-16 bg-wellness-100 rounded-full flex items-center justify-center">
-              <ShoppingBag className="h-8 w-8 text-wellness-600" />
-            </div>
-            
-            <div className="space-y-3">
-              <h2 className="text-2xl font-bold text-foreground">
-                Marketplace
-              </h2>
-              <p className="text-muted-foreground max-w-md">
-                This page is ready to be built out. It will show available SOT bundles,
-                pricing, and purchase functionality.
-              </p>
-            </div>
-
-            <Button className="bg-wellness-500 hover:bg-wellness-600">
-              Continue Building This Page
-            </Button>
-          </div>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {MARKETPLACE_ITEMS.map((item) => {
+            const owned = ownedIds.has(item.id);
+            const affordable = stats.balance >= item.price;
+            return (
+              <div
+                key={item.id}
+                className="glass rounded-2xl p-6 shadow-sm flex flex-col"
+              >
+                <div className="flex items-start justify-between mb-4">
+                  <span className="text-4xl">{item.emblem}</span>
+                  <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                    {CATEGORY_LABEL[item.category]}
+                  </span>
+                </div>
+                <h3 className="font-bold text-foreground mb-1">{item.name}</h3>
+                <p className="text-sm text-muted-foreground flex-1">
+                  {item.description}
+                </p>
+                <div className="flex items-center justify-between mt-5">
+                  <span className="font-bold text-foreground flex items-center gap-1">
+                    <Zap className="h-4 w-4 text-growth-500" />
+                    {item.price}
+                  </span>
+                  {owned ? (
+                    <Button
+                      disabled
+                      variant="outline"
+                      className="gap-1 border-growth-500 text-growth-500"
+                    >
+                      <Check className="h-4 w-4" />
+                      Owned
+                    </Button>
+                  ) : (
+                    <Button
+                      onClick={() => handleBuy(item.id)}
+                      disabled={!affordable || busyId === item.id}
+                      className="bg-wellness-500 hover:bg-wellness-600 text-white"
+                    >
+                      {busyId === item.id ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : affordable ? (
+                        "Redeem"
+                      ) : (
+                        "Need more SOC"
+                      )}
+                    </Button>
+                  )}
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </Layout>

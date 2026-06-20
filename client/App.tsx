@@ -6,9 +6,12 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./lib/auth-context";
+import { NeuroProvider } from "./lib/neuro-store";
 
 import Landing from "./pages/Landing";
 import Dashboard from "./pages/Dashboard";
+import Assessment from "./pages/Assessment";
+import Activities from "./pages/Activities";
 import Tokens from "./pages/Tokens";
 import NFTs from "./pages/NFTs";
 import Marketplace from "./pages/Marketplace";
@@ -41,6 +44,22 @@ function AppRoutes() {
         element={
           <ProtectedRoute>
             <Dashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/assessment"
+        element={
+          <ProtectedRoute>
+            <Assessment />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/activities"
+        element={
+          <ProtectedRoute>
+            <Activities />
           </ProtectedRoute>
         }
       />
@@ -103,13 +122,15 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <AppRoutes />
-          </BrowserRouter>
-        </TooltipProvider>
+        <NeuroProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
+              <AppRoutes />
+            </BrowserRouter>
+          </TooltipProvider>
+        </NeuroProvider>
       </AuthProvider>
     </QueryClientProvider>
   );
